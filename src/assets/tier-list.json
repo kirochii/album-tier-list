@@ -2,25 +2,77 @@
     "tier": {
         "S": [
             {
+                "id": "c3b6438f-b71f-46c3-a178-c66eadea3378",
+                "spotifyLink": "0JeDfH9IBw1tWdXIekSq5d",
+                "youtubeLink": "OLAK5uy_ldtLNVfdP_xLBJ9wsNV2TnfGrB0KvYB30"
+            },
+            {
+                "id": "bb449522-eefd-3d7e-b712-b2cf7e9de0b1",
+                "spotifyLink": "6MH3CAXp8AN8ELrbex18dM",
+                "youtubeLink": "OLAK5uy_mWCOJGGyU6zbwb6hH80n8PQtlZZ__gKOc"
+            }
+        ],
+        "A": [
+            {
                 "id": "7bce7790-e111-4225-9201-45dd1085c974",
                 "spotifyLink": "3k5hd3HIF4JDYfxQICHnhP",
                 "youtubeLink": "OLAK5uy_kvruVN3yVKXKxToBBvmSDkiUbEFHSfUNw"
             },
             {
-                "id": "c3b6438f-b71f-46c3-a178-c66eadea3378",
-                "spotifyLink": "0JeDfH9IBw1tWdXIekSq5d",
-                "youtubeLink": "OLAK5uy_ldtLNVfdP_xLBJ9wsNV2TnfGrB0KvYB30"
-            }
-        ],
-        "A": [
-            {
                 "id": "39c941a7-d86b-4cb0-93aa-d8de943591e4",
                 "spotifyLink": "4hBL8N0YTn1d8P1c0AZdLw",
                 "youtubeLink": "OLAK5uy_kqe5ECHTbuC4lSQF6Z_HGJ6jwkCYhl8Xo"
+            },
+            {
+                "id": "022cf112-23da-4da7-86d7-4025099c0472",
+                "spotifyLink": "4Njudp53NlPY6FC25YVrz9",
+                "youtubeLink": "OLAK5uy_n-YxiFNgmemHL9jF9HAh9E2eqCoaQJ6x8"
             }
         ],
-        "B": [],
-        "C": [],
+        "B": [
+            {
+                "id": "227f0340-0b86-4b28-b417-576753397bf2",
+                "spotifyLink": "0e24qDs91vLgW0DW9sMTqe",
+                "youtubeLink": "OLAK5uy_mwgB5sIqRBMhqK4xGq7nfv1pjtszEenE4"
+            },
+            {
+                "id": "76224375-ce2e-4e8a-adf7-3381b115ea71",
+                "spotifyLink": "22aFIEKxk2simwAoPwOJSr",
+                "youtubeLink": "OLAK5uy_mJ8hE92zHQUaAULwYpqK9-ZMpKRXO0SBk"
+            },
+            {
+                "id": "4728bfce-5b72-4517-ad22-4d6dcae8f34e",
+                "spotifyLink": "47rlABSBChwZC7qxAKzOWw",
+                "youtubeLink": "OLAK5uy_kR0GEh5lAdEqal1Nrh-7zwaA15B1mU3vQ"
+            }
+        ],
+        "C": [
+            {
+                "id": "670e2d9d-a2cc-425a-9c83-a623f141889b",
+                "spotifyLink": "7GYwD0h6YroMt5MZzFMNSZ",
+                "youtubeLink": "OLAK5uy_lVWUSzgyjEOgcBLHawUGEU8qf7HY8kKso"
+            },
+            {
+                "id": "081f9957-10cb-4978-bace-b71fae7371b4",
+                "spotifyLink": "0CWnwtPwfZEqQf5zOV8PE9",
+                "youtubeLink": "OLAK5uy_l-apkuMeCWENEisqukp3fjYr0KTeVlwg8"
+            },
+            {
+                "id": "99b9584e-c854-4e1e-97c2-5b483cc6ac47",
+                "spotifyLink": "7KWTkkwVixuoVkt60f8fb0",
+                "youtubeLink": "OLAK5uy_lAZKe8fN3Llyl1yf7DK8V_9Eq_gfAZZh4"
+            },
+            {
+                "id": "d963ad35-6026-4ebd-b71c-344a3cef205c",
+                "spotifyLink": "6LJuoFEtWLrOBaqvOUqoxf",
+                "youtubeLink": "OLAK5uy_mPIQa78Cm8zOLcRmJaluefCVApjfe7BVo"
+            },
+            {
+                "id": "2a4c3861-ddb2-47b1-9cfe-feac72198f57",
+                "spotifyLink": "6R21I5E805CLZmDn8vESQM",
+                "youtubeLink": "OLAK5uy_kMMGvsnnsXQ8iGr31AUz8fCNHNLc_LK4c"
+            }
+        ],
         "D": [],
         "E": [],
         "F": []

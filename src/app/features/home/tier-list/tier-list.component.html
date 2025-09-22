@@ -1,5 +1,6 @@
+@if (albumList && albumList.tieredAlbums) {
 <div class="w-full h-full border border-slate-200 dark:border-zinc-700 rounded-lg overflow-hidden">
-    @for (tier of (albumList?.tieredAlbums | keyvalue: sortByTier); track tier.key) {
+    @for (tier of (albumList.tieredAlbums | keyvalue: sortByTier); track tier.key) {
     <div class="flex bg-white dark:bg-zinc-900 w-full h-20 sm:h-30 md:h-40 lg:h-50">
         <div
             class="font-bold aspect-square text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-slate-700 dark:text-white flex justify-center items-center">
@@ -30,8 +31,12 @@
     </div>
     }
 </div>
-
-
+} @else {
+<div class="card flex justify-center">
+    <p-progress-spinner strokeWidth="5" fill="transparent" animationDuration="1s"
+        [style]="{ width: '50px', height: '50px' }" />
+</div>
+}
 
 <p-dialog [(visible)]="albumDialogVisible" [modal]="true" draggable="false" [closable]="true" focusOnShow="false"
     [dismissableMask]="true" [style]="{width: '50vw'}" [breakpoints]="{ '1024px': '50vw', '640px': '75vw' }"
