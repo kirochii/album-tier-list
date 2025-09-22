@@ -31,6 +31,7 @@
             ],
             "server": "src/main.server.ts",
             "outputMode": "server",
+            "outputPath": "dist/album-tier-list",
             "ssr": {
               "entry": "src/server.ts"
             }
@@ -41,7 +42,7 @@
                 {
                   "type": "initial",
                   "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                  "maximumError": "2MB"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -89,6 +90,9 @@
               "src/styles.scss"
             ]
           }
+        },
+        "deploy": {
+          "builder": "angular-cli-ghpages:deploy"
         }
       }
     }

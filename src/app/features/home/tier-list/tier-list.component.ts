@@ -4,13 +4,14 @@ import { DialogModule } from 'primeng/dialog';
 import { CarouselModule } from 'primeng/carousel';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { DarkModeService } from '@src/app/core/services/DarkMode/dark-mode.service';
 import { TieredAlbums, AlbumTiers, AlbumData } from '@src/app/shared/models/album';
 import { GetAlbumService } from '@features/home/get-album/get-album.service';
 
 @Component({
   selector: 'tier-list',
-  imports: [TableModule, CommonModule, DialogModule, CarouselModule, ButtonModule],
+  imports: [TableModule, CommonModule, DialogModule, CarouselModule, ButtonModule, ProgressSpinnerModule],
   templateUrl: './tier-list.component.html'
 })
 
