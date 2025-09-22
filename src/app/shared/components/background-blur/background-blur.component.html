@@ -1,0 +1,5 @@
+<div class="fixed inset-0 bg-cover bg-center" [style.backgroundImage]="'url(' + (todaysAlbum?.thumbnailLarge) + ')'">
+    <div [ngClass]="isDarkMode ? 'bg-[radial-gradient(circle,rgba(255,255,255,0),black_100%)]' : 'bg-[radial-gradient(circle,rgba(255,255,255,0),white_100%)]'"
+        class="absolute inset-0"></div>
+    <div [ngClass]="isDarkMode ? 'bg-black/75' : 'bg-white/75'" class="absolute inset-0 backdrop-blur-3xl"></div>
+</div>

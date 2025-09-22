@@ -1,0 +1,28 @@
+{
+    "tier": {
+        "S": [
+            {
+                "id": "7bce7790-e111-4225-9201-45dd1085c974",
+                "spotifyLink": "3k5hd3HIF4JDYfxQICHnhP",
+                "youtubeLink": "OLAK5uy_kvruVN3yVKXKxToBBvmSDkiUbEFHSfUNw"
+            },
+            {
+                "id": "c3b6438f-b71f-46c3-a178-c66eadea3378",
+                "spotifyLink": "0JeDfH9IBw1tWdXIekSq5d",
+                "youtubeLink": "OLAK5uy_ldtLNVfdP_xLBJ9wsNV2TnfGrB0KvYB30"
+            }
+        ],
+        "A": [
+            {
+                "id": "39c941a7-d86b-4cb0-93aa-d8de943591e4",
+                "spotifyLink": "4hBL8N0YTn1d8P1c0AZdLw",
+                "youtubeLink": "OLAK5uy_kqe5ECHTbuC4lSQF6Z_HGJ6jwkCYhl8Xo"
+            }
+        ],
+        "B": [],
+        "C": [],
+        "D": [],
+        "E": [],
+        "F": []
+    }
+}
