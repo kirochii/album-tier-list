@@ -1,25 +1,18 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { AlbumData, JSONAlbumData, AlbumTiers, TieredAlbums } from '@src/app/shared/models/album';
+import { AlbumData, JSONAlbumData, AlbumTiers, TieredAlbums, MinimalAlbumData } from '@src/app/shared/models/album';
+import { LocalStorageCacheService } from '@src/app/core/services/LocalStorageCache/local-storage-cache.service';
 import jsonData from '@src/assets/tier-list.json';
 import { forkJoin, Observable, of } from 'rxjs';
-import { tap, map } from 'rxjs/operators';
-
-interface CachedAlbum {
-  readonly data: AlbumData;
-  timestamp: number;
-}
+import { map, switchMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class GetAlbumService {
-  //Cache time to live
-  private readonly ttl = 1000 * 60 * 60 * 24;
-
   //Variables
-  lookupById: { [key: string]: JSONAlbumData } = {};
+  lookupById: { [key: string]: MinimalAlbumData } = {};
 
   //Domains
   private readonly musicBrainzUrl = 'https://musicbrainz.org/ws/2';
@@ -28,7 +21,7 @@ export class GetAlbumService {
   private readonly spotifyDomain = 'https://open.spotify.com/album/';
 
   //Constructors
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private cacheService: LocalStorageCacheService) {
     for (const tier of Object.values(jsonData.tier)) {
       for (const album of tier) {
         this.lookupById[album.id] = album;
@@ -36,37 +29,7 @@ export class GetAlbumService {
     }
   }
 
-  //Save album to cache
-  private saveToCache(albumId: string, data: AlbumData): void {
-    if (typeof localStorage === 'undefined') return;
-
-    const cached: CachedAlbum = {
-      data,
-      timestamp: Date.now()
-    };
-
-    localStorage.setItem(`album_${albumId}`, JSON.stringify(cached));
-  }
-
-  //Get album from cache
-  private getFromCache(albumId: string): AlbumData | null {
-    if (typeof localStorage === 'undefined') return null;
-
-    const item = localStorage.getItem(`album_${albumId}`);
-    if (!item) return null;
-
-    const cached: CachedAlbum = JSON.parse(item);
-    const now = Date.now();
-
-    if (now - cached.timestamp < this.ttl) {
-      return cached.data; // still valid
-    } else {
-      localStorage.removeItem(`album_${albumId}`); // expired
-      return null;
-    }
-  }
-
-  //Get album details using JSON
+  //Get album details from JSON
   private getJSONAlbumDetails(albumId: string): JSONAlbumData | undefined {
     const album = this.lookupById[albumId];
     if (!album) return undefined;
@@ -79,12 +42,11 @@ export class GetAlbumService {
 
   }
 
-  //Get album details using API
-  private getAPIAlbumDetails(albumId: string): Observable<AlbumData> {
+  private getMinimalAlbumDetails(albumId: string): Observable<MinimalAlbumData> {
     //Return cached data if exists
-    const cached = this.getFromCache(albumId);
-    if (cached) {
-      return of(cached);
+    const cachedData = this.cacheService.get<MinimalAlbumData>(albumId);
+    if (cachedData) {
+      return of(cachedData);
     }
 
     // Get JSON album details
@@ -94,51 +56,79 @@ export class GetAlbumService {
     }
 
     const headers = new HttpHeaders({
-      'User-Agent': 'AlbumTierList/1.0 ( example@example.com )'
+      'User-Agent': 'AlbumTierList/1.0 ( example@example.com )',
+      'Accept': 'application/json'
     });
 
-    const musicBrainz$ = this.http.get<any>(
-      `${this.musicBrainzUrl}/release-group/${albumId}?inc=artist-credits+genres&fmt=json`,
-      { headers }
-    );
+    const coverArt$ = this.http.get<any>(`${this.coverArtUrl}/release-group/${albumId}`, { headers });
 
-    const coverArt$ = this.http.get<any>(
-      `${this.coverArtUrl}/release-group/${albumId}`,
-      { headers: headers.set('Accept', 'application/json') }
-    );
+    return forkJoin([coverArt$]).pipe(
+      map(([coverArt]) => {
+        const rawImageUrl = coverArt?.images?.[0]?.thumbnails?.large;
+        const secureImageUrl = rawImageUrl ? rawImageUrl.replace(/^http:/, 'https:') : undefined;
 
-    return forkJoin([musicBrainz$, coverArt$]).pipe(
-      map(([musicBrainz, coverArt]) => {
-        const albumData: AlbumData = {
-          jsonAlbumData, // Data from JSON
-          title: musicBrainz.title,
-          artist: musicBrainz['artist-credit']?.[0]?.name,
-          release: musicBrainz['first-release-date']
-            ? new Date(musicBrainz['first-release-date'])
-            : undefined,
-          genres: musicBrainz.genres?.map((g: any) => g.name) || undefined,
-          thumbnailLarge: coverArt?.images?.[0]?.thumbnails?.large || undefined
+        const albumData: MinimalAlbumData = {
+          ...jsonAlbumData,
+          thumbnailLarge: secureImageUrl
         };
 
+        // Save to cache
+        this.cacheService.save(albumId, albumData);
+
         return albumData;
-      }),
-      tap(data => this.saveToCache(albumId, data))
+      })
     );
   }
 
-  //Get mapped albums
+  //Get full album details using API
+  getAPIAlbumDetails(albumId: string): Observable<AlbumData> {
+    return this.getMinimalAlbumDetails(albumId).pipe(
+      switchMap(minimalAlbumData => {
+        if (!minimalAlbumData) {
+          throw new Error(`Album with ID ${albumId} not found in JSON data`);
+        }
+
+        const headers = new HttpHeaders({
+          'User-Agent': 'AlbumTierList/1.0 ( example@example.com )'
+        });
+
+        const musicBrainz$ = this.http.get<any>(
+          `${this.musicBrainzUrl}/release-group/${albumId}?inc=artist-credits+genres&fmt=json`,
+          { headers }
+        );
+
+        return musicBrainz$.pipe(
+          map(musicBrainz => {
+            const albumData: AlbumData = {
+              ...minimalAlbumData,
+              title: musicBrainz.title,
+              artist: musicBrainz['artist-credit']?.[0]?.name,
+              release: musicBrainz['first-release-date']
+                ? new Date(musicBrainz['first-release-date'])
+                : undefined,
+              genres: musicBrainz.genres?.map((g: any) => g.name) || undefined
+            };
+
+            return albumData;
+          })
+        );
+      })
+    );
+  }
+
+  //Get mapped minimal albums
   getAlbumList(): Observable<TieredAlbums> {
     // Get all tiers
     const tiers = Object.values(AlbumTiers);
 
     // Map each tier to an Observable that fetches all albums in that tier
-    const tierObservables: Partial<Record<AlbumTiers, Observable<AlbumData[]>>> = {};
+    const tierObservables: Partial<Record<AlbumTiers, Observable<MinimalAlbumData[]>>> = {};
 
     tiers.forEach(tier => {
       const albumsInTier: JSONAlbumData[] = jsonData.tier[tier] || [];
 
       tierObservables[tier] = albumsInTier.length
-        ? forkJoin(albumsInTier.map(album => this.getAPIAlbumDetails(album.id)))
+        ? forkJoin(albumsInTier.map(album => this.getMinimalAlbumDetails(album.id)))
         : of([]);
     });
 

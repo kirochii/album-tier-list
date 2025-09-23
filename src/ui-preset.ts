@@ -70,7 +70,7 @@ const UiPreset = definePreset(Aura, {
                     }
                 }
             }
-        }
+        },
     }
 });
 
