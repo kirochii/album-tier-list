@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { AlbumData, AlbumTiers } from '@src/app/shared/models/album';
+import { AlbumData } from '@src/app/shared/models/album';
 
 @Injectable({
   providedIn: 'root'

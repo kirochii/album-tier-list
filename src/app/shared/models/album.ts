@@ -14,15 +14,17 @@ export interface JSONAlbumData {
     readonly youtubeLink: string | null;
 }
 
-export interface AlbumData {
-    readonly jsonAlbumData: JSONAlbumData;
+export interface MinimalAlbumData extends JSONAlbumData {
+    readonly thumbnailLarge?: string;
+}
+
+export interface AlbumData extends MinimalAlbumData {
     readonly title?: string;
     readonly artist?: string;
     readonly release?: Date;
     readonly genres?: ReadonlyArray<string>;
-    readonly thumbnailLarge?: string;
 }
 
 export interface TieredAlbums {
-    tieredAlbums: Partial<Record<AlbumTiers, AlbumData[]>>;
+    tieredAlbums: Partial<Record<AlbumTiers, MinimalAlbumData[]>>;
 }

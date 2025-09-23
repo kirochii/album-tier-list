@@ -6,6 +6,7 @@ import { TieredAlbums, AlbumData, AlbumTiers } from '@src/app/shared/models/albu
 import { DarkModeService } from '@src/app/core/services/DarkMode/dark-mode.service';
 import { DailyRecommendationService } from './daily-recommendation.service';
 import { CommonModule } from '@angular/common';
+import { formatTextList } from '@src/app/shared/utils/text-helpers';
 
 @Component({
   selector: 'daily-recommendation',
@@ -91,26 +92,20 @@ export class DailyRecommendationComponent {
     // Pick album from selected tier
     const albums = this.albumList.tieredAlbums[selectedTier]!;
     const albumIndex = hash % albums.length;
+    const randomAlbum = albums[albumIndex];
 
-    this.todaysAlbum = albums[albumIndex];
-    this.todaysTier = selectedTier;
+    this.albumService.getAPIAlbumDetails(randomAlbum.id).subscribe(fullAlbumData => {
+      this.todaysAlbum = fullAlbumData;
+      this.todaysTier = selectedTier;
 
-    // Save the album in the shared service
-    this.dailyRecommendationService.setTodaysAlbum(this.todaysAlbum);
+      this.dailyRecommendationService.setTodaysAlbum(this.todaysAlbum);
+
+      this.cdr.detectChanges();
+    });
   }
 
-  getGenres(genres: any): string {
-    if (!genres || genres.length === 0) return '-';
-
-    const genreList = Array.isArray(genres) ? genres : [genres];
-
-    return genreList
-      .map((g: string) =>
-        g
-          .split(' ')
-          .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-          .join(' ')
-      )
-      .join(', ');
+  formatAlbumGenres(genres: readonly string[] | string | null | undefined): string | null {
+    return formatTextList(genres as string[] | string | null | undefined);
   }
+
 }
